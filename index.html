@@ -1,130 +1,141 @@
-
 <!DOCTYPE html>
-<html lang="="es">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario SYT</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 2rem;
-            background-color: #f9f9f9;
-        }
-        h1, h2 {
-            color: #005baa;
-        }
-        .form-section {
-            background-color: #fff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        input, select, button {
-            width: 100%;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-        button {
-            background-color: #005baa;
-            color: white;
-            border: none;
-        }
-        .history {
-            background-color: #fff;
-            padding: 1rem;
-            border-radius: 8px;
-        }
-        .image-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .image-preview img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventario SYT</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select, button { display: block; margin-bottom: 10px; width: 100%; padding: 8px; }
+    h2 { color: #007BFF; }
+    #historial { margin-top: 20px; border-collapse: collapse; width: 100%; }
+    #historial th, #historial td { border: 1px solid #ddd; padding: 8px; }
+    #historial th { background-color: #f2f2f2; }
+  </style>
 </head>
 <body>
 
-<h1>Inventario SYT</h1>
+  <h1>📦 Inventario SYT</h1>
 
-<div class="form-section">
-    <h2>Registrar nuevo producto</h2>
-    <form id="productForm">
-        <input type="text" placeholder="Nombre del producto" id="nombre" required>
-        <input type="text" placeholder="Código SAP" id="codigoSAP" required>
-        <input type="number" placeholder="Cantidad" id="cantidad" required>
-        <input type="text" placeholder="Disciplina" id="disciplina">
-        <input type="text" placeholder="Descripción" id="descripcion">
-        <input type="text" placeholder="Diámetro" id="diametro">
-        <input type="text" placeholder="Sch" id="sch">
-        <input type="text" placeholder="Longitud" id="longitud">
-        <input type="text" placeholder="Peso(Kg)" id="peso">
-        <input type="text" placeholder="Fabricante" id="fabricante">
-        <input type="text" placeholder="Serial / Colada" id="serial">
-        <input type="text" placeholder="Modelo" id="modelo">
-        <input type="text" placeholder="Escala de Medición" id="escala">
-        <input type="text" placeholder="Certificado Material" id="certificado">
-        <input type="text" placeholder="Proveedor" id="proveedor">
-        <input type="text" placeholder="Inspección visual" id="inspeccion">
-        <input type="text" placeholder="Observaciones" id="observaciones">
-        <input type="file" id="imagenes" multiple accept="image/*" capture="environment">
-        <div class="image-preview" id="preview"></div>
-        <button type="submit">Guardar producto</button>
-    </form>
-</div>
+  <h2>Registrar producto</h2>
+  <form id="formInventario">
+    <input type="text" name="codigoSAP" placeholder="Código SAP" required />
+    <input type="text" name="reserva" placeholder="Reserva" />
+    <input type="text" name="disciplina" placeholder="Disciplina" />
+    <input type="text" name="descripcion" placeholder="Descripción" />
+    <input type="text" name="cantidad" placeholder="Cantidad" />
+    <input type="text" name="diametro" placeholder="Diámetro" />
+    <input type="text" name="sch" placeholder="SCH" />
+    <input type="text" name="longitud" placeholder="Longitud" />
+    <input type="text" name="peso" placeholder="Peso" />
+    <input type="text" name="fabricante" placeholder="Fabricante" />
+    <input type="text" name="serial" placeholder="Serial" />
+    <input type="text" name="modelo" placeholder="Modelo" />
+    <input type="text" name="escala" placeholder="Escala" />
+    <input type="text" name="certificado" placeholder="Certificado" />
+    <input type="text" name="proveedor" placeholder="Proveedor" />
+    <input type="text" name="inspeccion" placeholder="Inspección" />
+    <input type="text" name="observaciones" placeholder="Observaciones" />
 
-<div class="form-section">
-    <h2>Historial de movimientos</h2>
-    <div id="historial"></div>
-</div>
-<script>
-const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyUVQ-1ogRg-gFbBDPc_OtGr6iljlwgTzez4zF1h4VzoVI1Nws404pzUTYuvEsI5jkp1Q/exec';
+    <label>📸 Imágenes (puedes tomar o elegir varias):</label>
+    <input type="file" id="imagenes" accept="image/*" multiple capture="environment" />
 
-async function guardarProducto() {
-  const data = {
-    codigoSAP: document.getElementById('codigoSAP').value,
-    reserva: document.getElementById('reserva').value,
-    disciplina: document.getElementById('disciplina').value,
-    descripcion: document.getElementById('descripcion').value,
-    cantidad: document.getElementById('cantidad').value,
-    diametro: document.getElementById('diametro').value,
-    sch: document.getElementById('sch').value,
-    longitud: document.getElementById('longitud').value,
-    peso: document.getElementById('peso').value,
-    serial: document.getElementById('serial').value,
-    fabricante: document.getElementById('fabricante').value,
-    modelo: document.getElementById('modelo').value,
-    escala: document.getElementById('escala').value,
-    certificado: document.getElementById('certificado').value,
-    proveedor: document.getElementById('proveedor').value,
-    inspeccion: document.getElementById('inspeccion').value,
-    observaciones: document.getElementById('observaciones').value,
-    imagenes: selectedImages  // tu array de Base64 o nombres de imágenes
-  };
+    <button type="submit">💾 Guardar producto</button>
+  </form>
 
-  try {
-    await fetch(URL_WEBAPP, {
-  method: 'POST',
-  body: JSON.stringify(data)
-})
-.then(res => res.json())
-.then(res => {
-  if (res.status === "success") {
-    alert('✅ ' + res.message);
-  } else {
-    alert('❌ Error del servidor: ' + res.message);
-  }
-})
-.catch(error => {
-  alert('❌ Error de red o conexión: ' + error);
-});
+  <h2>📜 Historial de movimientos</h2>
+  <table id="historial">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Producto</th>
+        <th>Código SAP</th>
+        <th>Tipo Movimiento</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody id="tablaMovimientos">
+    </tbody>
+  </table>
+
+  <script>
+    const URL_WEBAPP = 'https://script.google.com/macros/s/AKfycbyUVQ-1ogRg-gFbBDPc_OtGr6iljlwgTzez4zF1h4VzoVI1Nws404pzUTYuvEsI5jkp1Q/exec';
+    
+    document.getElementById('formInventario').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
+
+      // Procesar imágenes
+      const imagenesInput = document.getElementById('imagenes');
+      if (imagenesInput.files.length > 0) {
+        const imagenes = [];
+        for (let i = 0; i < imagenesInput.files.length; i++) {
+          const file = imagenesInput.files[i];
+          const base64 = await toBase64(file);
+          imagenes.push(base64);
+        }
+        data.imagenes = imagenes;
+      }
+
+      try {
+        const response = await fetch(URL_WEBAPP, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const res = await response.json();
+
+        if (res.status === "success") {
+          alert('✅ ' + res.message);
+          form.reset();
+          cargarHistorial();
+        } else {
+          alert('❌ Error del servidor: ' + res.message);
+        }
+      } catch (error) {
+        alert('❌ Error de red o conexión: ' + error);
+      }
+    });
+
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    async function cargarHistorial() {
+      try {
+        const response = await fetch(URL_WEBAPP);
+        const datos = await response.json();
+
+        const tbody = document.getElementById('tablaMovimientos');
+        tbody.innerHTML = '';
+
+        datos.slice(1).forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${row[0]}</td>
+            <td>${row[2]}</td>
+            <td>${row[1]}</td>
+            <td>${row[3] || ''}</td>
+            <td>${row[4] || ''}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Error cargando historial:', error);
+      }
+    }
+
+    // Cargar historial al iniciar
+    cargarHistorial();
+  </script>
+</body>
+</html>
