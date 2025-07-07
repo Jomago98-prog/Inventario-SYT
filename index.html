@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,95 +13,139 @@
     button { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 15px; cursor: pointer; }
     .success { color: green; }
     .error { color: red; }
+    #preview img { max-width: 100px; margin: 5px; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
   <h1>Formulario de Inventario SYT</h1>
   <form id="inventarioForm">
-    <label>Nombre</label>
-    <input type="text" name="nombre" required /><label>Código SAP</label>
-<input type="text" name="codigoSAP" required />
+    <label>Nombre
+      <input type="text" name="nombre" required />
+    </label>
+    <label>Código SAP
+      <input type="text" name="codigoSAP" required />
+    </label>
+    <label>Reserva
+      <input type="text" name="reserva" />
+    </label>
+    <label>Disciplina
+      <input type="text" name="disciplina" />
+    </label>
+    <label>Descripción
+      <textarea name="descripcion"></textarea>
+    </label>
+    <label>Cantidad
+      <input type="number" name="cantidad" />
+    </label>
+    <label>Diámetro
+      <input type="text" name="diametro" />
+    </label>
+    <label>SCH
+      <input type="text" name="sch" />
+    </label>
+    <label>Longitud
+      <input type="text" name="longitud" />
+    </label>
+    <label>Peso (Kg)
+      <input type="text" name="peso" />
+    </label>
+    <label>Fabricante
+      <input type="text" name="fabricante" />
+    </label>
+    <label>Serial / Colada
+      <input type="text" name="serial" />
+    </label>
+    <label>Modelo
+      <input type="text" name="modelo" />
+    </label>
+    <label>Escala de Medición
+      <input type="text" name="escala" />
+    </label>
+    <label>Certificado material suministrado
+      <input type="text" name="certificado" />
+    </label>
+    <label>Proveedor
+      <input type="text" name="proveedor" />
+    </label>
+    <label>Inspección visual
+      <input type="text" name="inspeccion" />
+    </label>
+    <label>Observaciones
+      <textarea name="observaciones"></textarea>
+    </label>
+    <label>Fotos del producto (máx. 6)
+      <input type="file" id="imagenes" accept="image/*" multiple capture />
+    </label>
+    <div id="preview"></div>
+    <button type="submit">Guardar Producto</button>
+    <p id="mensaje"></p>
+  </form>
 
-<label>Reserva</label>
-<input type="text" name="reserva" />
-
-<label>Disciplina</label>
-<input type="text" name="disciplina" />
-
-<label>Descripción</label>
-<textarea name="descripcion"></textarea>
-
-<label>Cantidad</label>
-<input type="number" name="cantidad" />
-
-<label>Diámetro</label>
-<input type="text" name="diametro" />
-
-<label>SCH</label>
-<input type="text" name="sch" />
-
-<label>Longitud</label>
-<input type="text" name="longitud" />
-
-<label>Peso</label>
-<input type="text" name="peso" />
-
-<label>Fabricante</label>
-<input type="text" name="fabricante" />
-
-<label>Serial</label>
-<input type="text" name="serial" />
-
-<label>Modelo</label>
-<input type="text" name="modelo" />
-
-<label>Escala</label>
-<input type="text" name="escala" />
-
-<label>Certificado</label>
-<input type="text" name="certificado" />
-
-<label>Proveedor</label>
-<input type="text" name="proveedor" />
-
-<label>Inspección</label>
-<input type="text" name="inspeccion" />
-
-<label>Observaciones</label>
-<textarea name="observaciones"></textarea>
-
-<button type="submit">Guardar</button>
-<p id="mensaje"></p>
-
-  </form>  <script>
+  <script>
+    const apiUrl = "https://sheetdb.io/api/v1/8ma5fhqubdk9o";
     const form = document.getElementById("inventarioForm");
     const mensaje = document.getElementById("mensaje");
+    const imagenesInput = document.getElementById("imagenes");
+    const previewDiv = document.getElementById("preview");
+    let imagenesBase64 = [];
+
+    imagenesInput.addEventListener('change', async () => {
+      previewDiv.innerHTML = '';
+      imagenesBase64 = [];
+      const archivos = Array.from(imagenesInput.files).slice(0, 6);
+
+      for (const archivo of archivos) {
+        const base64 = await convertirABase64(archivo);
+        imagenesBase64.push(base64);
+        const img = document.createElement('img');
+        img.src = base64;
+        previewDiv.appendChild(img);
+      }
+    });
+
+    function convertirABase64(archivo) {
+      return new Promise((resolve, reject) => {
+        const lector = new FileReader();
+        lector.onload = () => resolve(lector.result);
+        lector.onerror = error => reject(error);
+        lector.readAsDataURL(archivo);
+      });
+    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      mensaje.textContent = '';
 
       const datos = Object.fromEntries(new FormData(form).entries());
-      datos.marca_temporal = new Date().toISOString();
+      datos["Marca temporal"] = new Date().toISOString();
+
+      // Guardar las imágenes en campos separados
+      for (let i = 0; i < 6; i++) {
+        datos[`Imagen${i+1}`] = imagenesBase64[i] || "";
+      }
 
       try {
-        const res = await fetch("https://sheetdb.io/api/v1/8ma5fhqubdk9o", {
+        const res = await fetch(apiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ data: datos })
         });
 
         if (res.ok) {
-          mensaje.textContent = "✅ Producto guardado correctamente.";
+          mensaje.textContent = "✅ Producto guardado correctamente en Google Sheets.";
           mensaje.className = "success";
           form.reset();
+          previewDiv.innerHTML = '';
+          imagenesBase64 = [];
         } else {
-          mensaje.textContent = "❌ Error al guardar. Código: " + res.status;
+          mensaje.textContent = `❌ Error al guardar. Código: ${res.status}`;
           mensaje.className = "error";
         }
       } catch (error) {
-        mensaje.textContent = "❌ Error de red o conexión: " + error.message;
+        mensaje.textContent = `❌ Error de red o conexión: ${error.message}`;
         mensaje.className = "error";
       }
     });
-  </script></body>
+  </script>
+</body>
 </html>
