@@ -87,35 +87,64 @@
     <h2>Historial de movimientos</h2>
     <div id="historial"></div>
 </div>
-
 <script>
+const webhookUrl = "https://script.google.com/macros/s/AKfycbwTqN1TdhbLN8mIX_MfpXK6_9dQ6wEY2L-AzmruaVcdlVHZFD8pqOdeHNrcwWVs7LHm7Q/exec";
+
 document.getElementById('imagenes').addEventListener('change', function(event) {
-    const preview = document.getElementById('preview');
-    preview.innerHTML = '';
-    Array.from(event.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
+  const preview = document.getElementById('preview');
+  preview.innerHTML = '';
+  Array.from(event.target.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+  });
 });
 
 document.getElementById('productForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const nombre = document.getElementById('nombre').value;
-    const cantidad = document.getElementById('cantidad').value;
-    const historial = document.getElementById('historial');
-    const entry = document.createElement('div');
-    entry.textContent = `Producto agregado: ${nombre} - Cantidad: ${cantidad}`;
-    historial.appendChild(entry);
-    alert('Producto guardado (modo local)');
-    this.reset();
+  event.preventDefault();
+
+  const data = {
+    nombre: document.getElementById('nombre').value,
+    codigoSAP: document.getElementById('codigoSAP').value,
+    reserva: "",
+    disciplina: document.getElementById('disciplina').value,
+    descripcion: document.getElementById('descripcion').value,
+    cantidad: document.getElementById('cantidad').value,
+    diametro: document.getElementById('diametro').value,
+    sch: document.getElementById('sch').value,
+    longitud: document.getElementById('longitud').value,
+    peso: document.getElementById('peso').value,
+    fabricante: document.getElementById('fabricante').value,
+    serial: document.getElementById('serial').value,
+    modelo: document.getElementById('modelo').value,
+    escala: document.getElementById('escala').value,
+    certificado: document.getElementById('certificado').value,
+    proveedor: document.getElementById('proveedor').value,
+    inspeccion: document.getElementById('inspeccion').value,
+    observaciones: document.getElementById('observaciones').value,
+    tipoMovimiento: "Entrada"  // Puedes hacer dinámico si agregas un select para elegir Entrada/Salida/Reintegro
+  };
+
+  fetch(webhookUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    alert('✅ Producto guardado en Google Sheets');
+    document.getElementById('productForm').reset();
     document.getElementById('preview').innerHTML = '';
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert('❌ Error al guardar en Google Sheets');
+  });
 });
 </script>
-
-</body>
-</html>
