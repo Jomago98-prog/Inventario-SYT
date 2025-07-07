@@ -88,29 +88,12 @@
     <div id="historial"></div>
 </div>
 <script>
-const webhookUrl = "https://script.google.com/macros/s/AKfycbyUVQ-1ogRg-gFbBDPc_OtGr6iljlwgTzez4zF1h4VzoVI1Nws404pzUTYuvEsI5jkp1Q/exec";
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyUVQ-1ogRg-gFbBDPc_OtGr6iljlwgTzez4zF1h4VzoVI1Nws404pzUTYuvEsI5jkp1Q/exec';
 
-document.getElementById('imagenes').addEventListener('change', function(event) {
-  const preview = document.getElementById('preview');
-  preview.innerHTML = '';
-  Array.from(event.target.files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = e => {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          preview.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-  });
-});
-
-document.getElementById('productForm').addEventListener('submit', function(event) {
-  event.preventDefault();
-
+async function guardarProducto() {
   const data = {
-    nombre: document.getElementById('nombre').value,
     codigoSAP: document.getElementById('codigoSAP').value,
-    reserva: "",
+    reserva: document.getElementById('reserva').value,
     disciplina: document.getElementById('disciplina').value,
     descripcion: document.getElementById('descripcion').value,
     cantidad: document.getElementById('cantidad').value,
@@ -118,32 +101,36 @@ document.getElementById('productForm').addEventListener('submit', function(event
     sch: document.getElementById('sch').value,
     longitud: document.getElementById('longitud').value,
     peso: document.getElementById('peso').value,
-    fabricante: document.getElementById('fabricante').value,
     serial: document.getElementById('serial').value,
+    fabricante: document.getElementById('fabricante').value,
     modelo: document.getElementById('modelo').value,
     escala: document.getElementById('escala').value,
     certificado: document.getElementById('certificado').value,
     proveedor: document.getElementById('proveedor').value,
     inspeccion: document.getElementById('inspeccion').value,
     observaciones: document.getElementById('observaciones').value,
-    tipoMovimiento: "Entrada"  // Puedes hacer dinámico si agregas un select para elegir Entrada/Salida/Reintegro
+    imagenes: selectedImages  // tu array de Base64 o nombres de imágenes
   };
 
-  fetch(webhookUrl, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(() => {
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',       // para evitar errores de CORS
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
     alert('✅ Producto guardado en Google Sheets');
-    document.getElementById('productForm').reset();
-    document.getElementById('preview').innerHTML = '';
-  })
-  .catch((error) => {
-    console.error('Error:', error);
+    limpiarFormulario();
+
+  } catch (error) {
+    console.error('Error al guardar:', error);
+    alert('❌ Error al guardar en Google Sheets');
+  }
+}
+</script>
     alert('❌ Error al guardar en Google Sheets');
   });
 });
