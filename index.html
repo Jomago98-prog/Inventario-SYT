@@ -1,310 +1,106 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inventario SYT</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 700px;
-      margin: auto;
-      background-color: #f8f8f8;
-    }
-    h1, h2 {
-      color: #007bff;
-      text-align: center;
-    }
-    label {
-      margin-top: 10px;
-      display: block;
-      font-weight: bold;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .section {
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
+    h1 { color: #2c3e50; }
+    form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 10px; }
+    input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 15px; cursor: pointer; }
+    .success { color: green; }
+    .error { color: red; }
   </style>
 </head>
 <body>
+  <h1>Formulario de Inventario SYT</h1>
+  <form id="inventarioForm">
+    <label>Nombre</label>
+    <input type="text" name="nombre" required /><label>Código SAP</label>
+<input type="text" name="codigoSAP" required />
 
-  <h1>📦 Inventario SYT</h1>
+<label>Reserva</label>
+<input type="text" name="reserva" />
 
-  <div class="section">
-    <h2>Registrar Nuevo Producto</h2>
-    <form id="productForm">
-      <label>Nombre</label>
-      <input type="text" id="nombre" required />
+<label>Disciplina</label>
+<input type="text" name="disciplina" />
 
-      <label>Código SAP</label>
-      <input type="text" id="codigoSAP" required />
+<label>Descripción</label>
+<textarea name="descripcion"></textarea>
 
-      <label>Reserva</label>
-      <input type="text" id="reserva" />
+<label>Cantidad</label>
+<input type="number" name="cantidad" />
 
-      <label>Disciplina</label>
-      <input type="text" id="disciplina" />
+<label>Diámetro</label>
+<input type="text" name="diametro" />
 
-      <label>Descripción</label>
-      <input type="text" id="descripcion" />
+<label>SCH</label>
+<input type="text" name="sch" />
 
-      <label>Cantidad</label>
-      <input type="number" id="cantidad" />
+<label>Longitud</label>
+<input type="text" name="longitud" />
 
-      <label>Diámetro</label>
-      <input type="text" id="diametro" />
+<label>Peso</label>
+<input type="text" name="peso" />
 
-      <label>Sch</label>
-      <input type="text" id="sch" />
+<label>Fabricante</label>
+<input type="text" name="fabricante" />
 
-      <label>Longitud</label>
-      <input type="text" id="longitud" />
+<label>Serial</label>
+<input type="text" name="serial" />
 
-      <label>Peso</label>
-      <input type="text" id="peso" />
+<label>Modelo</label>
+<input type="text" name="modelo" />
 
-      <label>Fabricante</label>
-      <input type="text" id="fabricante" />
+<label>Escala</label>
+<input type="text" name="escala" />
 
-      <label>Serial / Colada</label>
-      <input type="text" id="serial" />
+<label>Certificado</label>
+<input type="text" name="certificado" />
 
-      <label>Modelo</label>
-      <input type="text" id="modelo" />
+<label>Proveedor</label>
+<input type="text" name="proveedor" />
 
-      <label>Escala de Medición</label>
-      <input type="text" id="escala" />
+<label>Inspección</label>
+<input type="text" name="inspeccion" />
 
-      <label>Certificado Material Suministrado</label>
-      <input type="text" id="certificado" />
+<label>Observaciones</label>
+<textarea name="observaciones"></textarea>
 
-      <label>Proveedor</label>
-      <input type="text" id="proveedor" />
+<button type="submit">Guardar</button>
+<p id="mensaje"></p>
 
-      <label>Inspección Visual</label>
-      <input type="text" id="inspeccion" />
+  </form>  <script>
+    const form = document.getElementById("inventarioForm");
+    const mensaje = document.getElementById("mensaje");
 
-      <label>Observaciones</label>
-      <textarea id="observaciones"></textarea>
-
-      <label>Imágenes (máximo 6)</label>
-      <input type="file" id="imagenes" accept="image/*" capture="environment" multiple />
-
-      <button type="submit">Guardar Producto</button>
-    </form>
-  </div>
-
-  <div class="section">
-    <h2>📤 Entregar Material</h2>
-    <form id="entregaForm">
-      <label>Código SAP</label>
-      <input type="text" id="entregaCodigoSAP" required />
-
-      <label>Cantidad a Entregar</label>
-      <input type="number" id="entregaCantidad" required />
-
-      <button type="submit">Registrar Entrega</button>
-    </form>
-  </div>
-
-  <div class="section">
-    <h2>📥 Reintegro de Material</h2>
-    <form id="reintegroForm">
-      <label>Código SAP</label>
-      <input type="text" id="reintegroCodigoSAP" required />
-
-      <label>Cantidad a Reingresar</label>
-      <input type="number" id="reintegroCantidad" required />
-
-      <button type="submit">Registrar Reintegro</button>
-    </form>
-  </div>
-
-  <div class="section">
-    <h2>📜 Historial de Movimientos</h2>
-    <div id="historial">
-      <p>Cargando historial desde Google Sheets...</p>
-    </div>
-  </div>
-
-  <script>
-    const webhookURL = 'https://sheetdb.io/api/v1/8ma5fhqubdk9o';
-
-    // Helper para convertir imagen a base64
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-
-    // Enviar nuevo producto
-    document.getElementById('productForm').addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const datos = Object.fromEntries(new FormData(form).entries());
+      datos.marca_temporal = new Date().toISOString();
+
       try {
-        const imagenesInput = document.getElementById('imagenes');
-        let imagenes = [];
-        for (let i = 0; i < Math.min(6, imagenesInput.files.length); i++) {
-          const base64 = await toBase64(imagenesInput.files[i]);
-          imagenes.push(base64);
-        }
-
-        const data = {
-          timestamp: new Date().toISOString(),
-          nombre: document.getElementById('nombre').value,
-          codigoSAP: document.getElementById('codigoSAP').value,
-          reserva: document.getElementById('reserva').value,
-          disciplina: document.getElementById('disciplina').value,
-          descripcion: document.getElementById('descripcion').value,
-          cantidad: document.getElementById('cantidad').value,
-          diametro: document.getElementById('diametro').value,
-          sch: document.getElementById('sch').value,
-          longitud: document.getElementById('longitud').value,
-          peso: document.getElementById('peso').value,
-          fabricante: document.getElementById('fabricante').value,
-          serial: document.getElementById('serial').value,
-          modelo: document.getElementById('modelo').value,
-          escala: document.getElementById('escala').value,
-          certificado: document.getElementById('certificado').value,
-          proveedor: document.getElementById('proveedor').value,
-          inspeccion: document.getElementById('inspeccion').value,
-          observaciones: document.getElementById('observaciones').value,
-          imagenes
-        };
-
-        const res = await sendData(data);
-        if (res.ok) {
-          alert('✅ Producto guardado correctamente');
-          document.getElementById('productForm').reset();
-          loadHistorial();
-        } else {
-          alert('❌ Error: ' + res.error);
-        }
-      } catch (error) {
-        alert('❌ Error inesperado:\n' + error);
-      }
-    });
-
-    // Entrega de material
-    document.getElementById('entregaForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        const data = {
-          operacion: 'entrega',
-          codigoSAP: document.getElementById('entregaCodigoSAP').value,
-          cantidad: document.getElementById('entregaCantidad').value
-        };
-        const res = await sendData(data);
-        if (res.ok) {
-          alert('✅ Entrega registrada');
-          document.getElementById('entregaForm').reset();
-          loadHistorial();
-        } else {
-          alert('❌ Error: ' + res.error);
-        }
-      } catch (error) {
-        alert('❌ Error inesperado:\n' + error);
-      }
-    });
-
-    // Reintegro de material
-    document.getElementById('reintegroForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        const data = {
-          operacion: 'reintegro',
-          codigoSAP: document.getElementById('reintegroCodigoSAP').value,
-          cantidad: document.getElementById('reintegroCantidad').value
-        };
-        const res = await sendData(data);
-        if (res.ok) {
-          alert('✅ Reintegro registrado');
-          document.getElementById('reintegroForm').reset();
-          loadHistorial();
-        } else {
-          alert('❌ Error: ' + res.error);
-        }
-      } catch (error) {
-        alert('❌ Error inesperado:\n' + error);
-      }
-    });
-
-    // Función genérica para enviar datos
-    async function sendData(data) {
-      try {
-        const response = await fetch(webhookURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+        const res = await fetch("https://sheetdb.io/api/v1/8ma5fhqubdk9o", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: datos })
         });
 
-        if (response.ok) {
-          try {
-            const json = await response.json();
-            if (json && json.status === 'success') {
-              return { ok: true };
-            } else {
-              return { ok: false, error: json.message || 'Error en servidor' };
-            }
-          } catch {
-            return { ok: true }; // Si es no-CORS y no podemos leer, asumimos éxito
-          }
+        if (res.ok) {
+          mensaje.textContent = "✅ Producto guardado correctamente.";
+          mensaje.className = "success";
+          form.reset();
         } else {
-          const text = await response.text();
-          return { ok: false, error: 'HTTP ' + response.status + ': ' + text };
+          mensaje.textContent = "❌ Error al guardar. Código: " + res.status;
+          mensaje.className = "error";
         }
       } catch (error) {
-        return { ok: false, error: error.toString() };
+        mensaje.textContent = "❌ Error de red o conexión: " + error.message;
+        mensaje.className = "error";
       }
-    }
-
-    // Historial (placeholder para desarrollo)
-    function loadHistorial() {
-      document.getElementById('historial').innerHTML = "<p>✅ Los movimientos quedan registrados en tu hoja de Google Sheets. Para verlos, abre tu documento en Google Drive.</p>";
-    }
-
-    // Inicial
-    loadHistorial();
-  </script>
-</body>
+    });
+  </script></body>
 </html>
