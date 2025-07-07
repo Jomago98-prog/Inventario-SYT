@@ -34,7 +34,7 @@ _(Reemplaza con el tuyo real una vez se genere)_
 
 ## 🧠 Autor
 
-Desarrollado por [Tu Nombre o Empresa], con apoyo de IA personalizada por ChatGPT/OpenAI.
+Desarrollado por Neuron IA.
 
 ---
 
