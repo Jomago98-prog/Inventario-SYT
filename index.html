@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario SYT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #005baa;
+        }
+        .form-section {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background-color: #005baa;
+            color: white;
+            border: none;
+        }
+        .history {
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Inventario SYT</h1>
+
+<div class="form-section">
+    <h2>Registrar nuevo producto</h2>
+    <form id="productForm">
+        <input type="text" placeholder="Nombre del producto" id="nombre" required>
+        <input type="text" placeholder="Código SAP" id="codigoSAP" required>
+        <input type="number" placeholder="Cantidad" id="cantidad" required>
+        <input type="text" placeholder="Disciplina" id="disciplina">
+        <input type="text" placeholder="Descripción" id="descripcion">
+        <input type="text" placeholder="Diámetro" id="diametro">
+        <input type="text" placeholder="Sch" id="sch">
+        <input type="text" placeholder="Longitud" id="longitud">
+        <input type="text" placeholder="Peso(Kg)" id="peso">
+        <input type="text" placeholder="Fabricante" id="fabricante">
+        <input type="text" placeholder="Serial / Colada" id="serial">
+        <input type="text" placeholder="Modelo" id="modelo">
+        <input type="text" placeholder="Escala de Medición" id="escala">
+        <input type="text" placeholder="Certificado Material" id="certificado">
+        <input type="text" placeholder="Proveedor" id="proveedor">
+        <input type="text" placeholder="Inspección visual" id="inspeccion">
+        <input type="text" placeholder="Observaciones" id="observaciones">
+        <input type="file" id="imagenes" multiple accept="image/*" capture="environment">
+        <div class="image-preview" id="preview"></div>
+        <button type="submit">Guardar producto</button>
+    </form>
+</div>
+
+<div class="form-section">
+    <h2>Historial de movimientos</h2>
+    <div id="historial"></div>
+</div>
+
+<script>
+document.getElementById('imagenes').addEventListener('change', function(event) {
+    const preview = document.getElementById('preview');
+    preview.innerHTML = '';
+    Array.from(event.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+document.getElementById('productForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const cantidad = document.getElementById('cantidad').value;
+    const historial = document.getElementById('historial');
+    const entry = document.createElement('div');
+    entry.textContent = `Producto agregado: ${nombre} - Cantidad: ${cantidad}`;
+    historial.appendChild(entry);
+    alert('Producto guardado (modo local)');
+    this.reset();
+    document.getElementById('preview').innerHTML = '';
+});
+</script>
+
+</body>
+</html>
