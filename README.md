@@ -28,7 +28,7 @@ Aplicación web para el control de inventarios de implementos de construcción, 
 
 ## 🔗 Enlace en vivo
 
-👉 [https://TU_USUARIO.github.io/inventario-syt](https://TU_USUARIO.github.io/inventario-syt)
+👉 [https://Jomago98-prog.github.io/inventario-syt](https://TU_USUARIO.github.io/inventario-syt)
 
 _(Reemplaza con el tuyo real una vez se genere)_
 
