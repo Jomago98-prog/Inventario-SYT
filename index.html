@@ -1,141 +1,135 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventario SYT</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, select, button { display: block; margin-bottom: 10px; width: 100%; padding: 8px; }
-    h2 { color: #007BFF; }
-    #historial { margin-top: 20px; border-collapse: collapse; width: 100%; }
-    #historial th, #historial td { border: 1px solid #ddd; padding: 8px; }
-    #historial th { background-color: #f2f2f2; }
-  </style>
-</head>
-<body>
+// Guardar producto
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-  <h1>📦 Inventario SYT</h1>
+  try {
+    const imagenesInput = document.getElementById('imagenes');
+    const imagenes = [];
+    for (const file of imagenesInput.files) {
+      const base64 = await toBase64(file);
+      imagenes.push(base64);
+    }
 
-  <h2>Registrar producto</h2>
-  <form id="formInventario">
-    <input type="text" name="codigoSAP" placeholder="Código SAP" required />
-    <input type="text" name="reserva" placeholder="Reserva" />
-    <input type="text" name="disciplina" placeholder="Disciplina" />
-    <input type="text" name="descripcion" placeholder="Descripción" />
-    <input type="text" name="cantidad" placeholder="Cantidad" />
-    <input type="text" name="diametro" placeholder="Diámetro" />
-    <input type="text" name="sch" placeholder="SCH" />
-    <input type="text" name="longitud" placeholder="Longitud" />
-    <input type="text" name="peso" placeholder="Peso" />
-    <input type="text" name="fabricante" placeholder="Fabricante" />
-    <input type="text" name="serial" placeholder="Serial" />
-    <input type="text" name="modelo" placeholder="Modelo" />
-    <input type="text" name="escala" placeholder="Escala" />
-    <input type="text" name="certificado" placeholder="Certificado" />
-    <input type="text" name="proveedor" placeholder="Proveedor" />
-    <input type="text" name="inspeccion" placeholder="Inspección" />
-    <input type="text" name="observaciones" placeholder="Observaciones" />
+    const data = {
+      timestamp: new Date().toISOString(),
+      nombre: document.getElementById('nombre').value,
+      codigoSAP: document.getElementById('codigoSAP').value,
+      reserva: document.getElementById('reserva').value,
+      disciplina: document.getElementById('disciplina').value,
+      descripcion: document.getElementById('descripcion').value,
+      cantidad: document.getElementById('cantidad').value,
+      diametro: document.getElementById('diametro').value,
+      sch: document.getElementById('sch').value,
+      longitud: document.getElementById('longitud').value,
+      peso: document.getElementById('peso').value,
+      fabricante: document.getElementById('fabricante').value,
+      serial: document.getElementById('serial').value,
+      modelo: document.getElementById('modelo').value,
+      escala: document.getElementById('escala').value,
+      certificado: document.getElementById('certificado').value,
+      proveedor: document.getElementById('proveedor').value,
+      inspeccion: document.getElementById('inspeccion').value,
+      observaciones: document.getElementById('observaciones').value,
+      imagenes
+    };
 
-    <label>📸 Imágenes (puedes tomar o elegir varias):</label>
-    <input type="file" id="imagenes" accept="image/*" multiple capture="environment" />
-
-    <button type="submit">💾 Guardar producto</button>
-  </form>
-
-  <h2>📜 Historial de movimientos</h2>
-  <table id="historial">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Producto</th>
-        <th>Código SAP</th>
-        <th>Tipo Movimiento</th>
-        <th>Cantidad</th>
-      </tr>
-    </thead>
-    <tbody id="tablaMovimientos">
-    </tbody>
-  </table>
-
-  <script>
-    const URL_WEBAPP = 'https://script.google.com/macros/s/AKfycbyUVQ-1ogRg-gFbBDPc_OtGr6iljlwgTzez4zF1h4VzoVI1Nws404pzUTYuvEsI5jkp1Q/exec';
-    
-    document.getElementById('formInventario').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const form = e.target;
-      const formData = new FormData(form);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
-
-      // Procesar imágenes
-      const imagenesInput = document.getElementById('imagenes');
-      if (imagenesInput.files.length > 0) {
-        const imagenes = [];
-        for (let i = 0; i < imagenesInput.files.length; i++) {
-          const file = imagenesInput.files[i];
-          const base64 = await toBase64(file);
-          imagenes.push(base64);
-        }
-        data.imagenes = imagenes;
-      }
-
-      try {
-        const response = await fetch(URL_WEBAPP, {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const res = await response.json();
-
-        if (res.status === "success") {
-          alert('✅ ' + res.message);
-          form.reset();
-          cargarHistorial();
-        } else {
-          alert('❌ Error del servidor: ' + res.message);
-        }
-      } catch (error) {
-        alert('❌ Error de red o conexión: ' + error);
-      }
+    const response = await fetch(webhookURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
 
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-
-    async function cargarHistorial() {
-      try {
-        const response = await fetch(URL_WEBAPP);
-        const datos = await response.json();
-
-        const tbody = document.getElementById('tablaMovimientos');
-        tbody.innerHTML = '';
-
-        datos.slice(1).forEach(row => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${row[0]}</td>
-            <td>${row[2]}</td>
-            <td>${row[1]}</td>
-            <td>${row[3] || ''}</td>
-            <td>${row[4] || ''}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (error) {
-        console.error('Error cargando historial:', error);
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const res = await response.json();
+      if (res.status === "success") {
+        alert('✅ ' + res.message);
+        document.getElementById('productForm').reset();
+        loadHistorial();
+      } else {
+        alert('❌ Error del servidor: ' + res.message);
       }
+    } else {
+      const text = await response.text();
+      alert('❌ Respuesta inesperada:\n' + text);
     }
 
-    // Cargar historial al iniciar
-    cargarHistorial();
-  </script>
-</body>
-</html>
+  } catch (error) {
+    alert('❌ Error de red o conexión:\n' + error);
+    console.error(error);
+  }
+});
+// Entrega de material
+document.getElementById('entregaForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const data = {
+    operacion: 'entrega',
+    codigoSAP: document.getElementById('entregaCodigoSAP').value,
+    cantidad: document.getElementById('entregaCantidad').value
+  };
+
+  try {
+    const response = await fetch(webhookURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const res = await response.json();
+      if (res.status === "success") {
+        alert('✅ ' + res.message);
+        document.getElementById('entregaForm').reset();
+        loadHistorial();
+      } else {
+        alert('❌ Error del servidor: ' + res.message);
+      }
+    } else {
+      const text = await response.text();
+      alert('❌ Respuesta inesperada:\n' + text);
+    }
+
+  } catch (error) {
+    alert('❌ Error de red o conexión:\n' + error);
+    console.error(error);
+  }
+});
+// Reintegro de material
+document.getElementById('reintegroForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const data = {
+    operacion: 'reintegro',
+    codigoSAP: document.getElementById('reintegroCodigoSAP').value,
+    cantidad: document.getElementById('reintegroCantidad').value
+  };
+
+  try {
+    const response = await fetch(webhookURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const res = await response.json();
+      if (res.status === "success") {
+        alert('✅ ' + res.message);
+        document.getElementById('reintegroForm').reset();
+        loadHistorial();
+      } else {
+        alert('❌ Error del servidor: ' + res.message);
+      }
+    } else {
+      const text = await response.text();
+      alert('❌ Respuesta inesperada:\n' + text);
+    }
+
+  } catch (error) {
+    alert('❌ Error de red o conexión:\n' + error);
+    console.error(error);
+  }
+});
