@@ -113,25 +113,18 @@ async function guardarProducto() {
   };
 
   try {
-    await fetch(WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',       // para evitar errores de CORS
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    alert('✅ Producto guardado en Google Sheets');
-    limpiarFormulario();
-
-  } catch (error) {
-    console.error('Error al guardar:', error);
-    alert('❌ Error al guardar en Google Sheets');
+    await fetch(URL_WEBAPP, {
+  method: 'POST',
+  body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(res => {
+  if (res.status === "success") {
+    alert('✅ ' + res.message);
+  } else {
+    alert('❌ Error del servidor: ' + res.message);
   }
-}
-</script>
-    alert('❌ Error al guardar en Google Sheets');
-  });
+})
+.catch(error => {
+  alert('❌ Error de red o conexión: ' + error);
 });
-</script>
