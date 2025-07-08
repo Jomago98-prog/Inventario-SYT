@@ -3,137 +3,157 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formulario de Inventario</title>
+  <title>Inventario SYT</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
+      background-color: #f0f4f8;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    h1 {
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 1rem;
       text-align: center;
-      color: #2c3e50;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    main {
+      max-width: 800px;
+      background-color: #fff;
+      margin: 2rem auto;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+      color: #007bff;
     }
     form {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
     }
     label {
-      display: block;
-      margin-top: 10px;
       font-weight: bold;
-      color: #34495e;
+      color: #333;
     }
     input, textarea {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 0.5rem;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
+      border-radius: 5px;
+    }
+    input[type="file"] {
+      padding: 0.3rem;
+    }
+    .full-width {
+      grid-column: 1 / -1;
     }
     button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: #3498db;
-      color: white;
+      grid-column: 1 / -1;
+      padding: 0.8rem;
+      background-color: #007bff;
+      color: #fff;
       border: none;
-      border-radius: 4px;
-      font-size: 16px;
+      border-radius: 5px;
+      font-size: 1rem;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #2980b9;
+      background-color: #0056b3;
+    }
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Formulario de Inventario</h1>
-  <form id="formulario">
-    <label for="Nombre">Nombre</label>
-    <input type="text" id="Nombre" required>
+  <header>📦 Inventario SYT</header>
+  <main>
+    <h2>Formulario de Inventario</h2>
+    <form id="formulario">
+      <label>Nombre</label>
+      <input type="text" id="Nombre" required>
 
-    <label for="CodigoSAP">Codigo SAP</label>
-    <input type="text" id="CodigoSAP">
+      <label>Codigo SAP</label>
+      <input type="text" id="Codigo SAP">
 
-    <label for="Reserva">Reserva</label>
-    <input type="text" id="Reserva">
+      <label>Reserva</label>
+      <input type="text" id="Reserva">
 
-    <label for="Disciplina">Disciplina</label>
-    <input type="text" id="Disciplina">
+      <label>Disciplina</label>
+      <input type="text" id="Disciplina">
 
-    <label for="Descripcion">Descripcion</label>
-    <input type="text" id="Descripcion">
+      <label>Descripcion</label>
+      <input type="text" id="Descripcion">
 
-    <label for="Cantidad">Cantidad</label>
-    <input type="number" id="Cantidad">
+      <label>Cantidad</label>
+      <input type="number" id="Cantidad">
 
-    <label for="Diametro">Diametro</label>
-    <input type="text" id="Diametro">
+      <label>Diametro</label>
+      <input type="text" id="Diametro">
 
-    <label for="Sch">Sch</label>
-    <input type="text" id="Sch">
+      <label>Sch</label>
+      <input type="text" id="Sch">
 
-    <label for="Longitud">Longitud</label>
-    <input type="text" id="Longitud">
+      <label>Longitud</label>
+      <input type="text" id="Longitud">
 
-    <label for="Peso">Peso (Kg)</label>
-    <input type="text" id="Peso">
+      <label>Peso (Kg)</label>
+      <input type="text" id="Peso (Kg)">
 
-    <label for="Fabricante">Fabricante</label>
-    <input type="text" id="Fabricante">
+      <label>Fabricante</label>
+      <input type="text" id="Fabricante">
 
-    <label for="Serial">Serial</label>
-    <input type="text" id="Serial">
+      <label>Serial</label>
+      <input type="text" id="Serial">
 
-    <label for="Modelo">Modelo</label>
-    <input type="text" id="Modelo">
+      <label>Modelo</label>
+      <input type="text" id="Modelo">
 
-    <label for="Escala">Escala</label>
-    <input type="text" id="Escala">
+      <label>Escala</label>
+      <input type="text" id="Escala">
 
-    <label for="Certificado">Certificado</label>
-    <input type="text" id="Certificado">
+      <label>Certificado</label>
+      <input type="text" id="Certificado">
 
-    <label for="Proveedor">Proveedor</label>
-    <input type="text" id="Proveedor">
+      <label>Proveedor</label>
+      <input type="text" id="Proveedor">
 
-    <label for="Inspeccion">Inspeccion</label>
-    <input type="text" id="Inspeccion">
+      <label>Inspeccion</label>
+      <input type="text" id="Inspeccion">
 
-    <label for="Observaciones">Observaciones</label>
-    <textarea id="Observaciones" rows="3"></textarea>
+      <label>Observaciones</label>
+      <textarea id="Observaciones" rows="3"></textarea>
 
-    <label for="Imagenes">Imágenes (máx. 6)</label>
-    <input type="file" id="Imagenes" accept="image/*" multiple>
+      <label class="full-width">Imágenes (máx. 6)</label>
+      <input class="full-width" type="file" id="Imagenes" accept="image/*" multiple>
 
-    <button type="submit">Guardar</button>
-  </form>
+      <button type="submit">Guardar en Google Sheets</button>
+    </form>
+  </main>
 
   <script>
-    document.getElementById('formulario').addEventListener('submit', async function(e) {
+    document.getElementById("formulario").addEventListener("submit", async function(e){
       e.preventDefault();
 
-      // Carga imágenes como base64
       const archivos = document.getElementById('Imagenes').files;
       const imagenesBase64 = [];
       for (let i = 0; i < archivos.length && i < 6; i++) {
-        const archivo = archivos[i];
-        const base64 = await toBase64(archivo);
+        const base64 = await toBase64(archivos[i]);
         imagenesBase64.push(base64);
       }
 
-      // Arma el objeto con nombres idénticos a tu hoja
       const data = {
         "Marca temporal": new Date().toISOString(),
         "Nombre": document.getElementById("Nombre").value,
-        "Codigo SAP": document.getElementById("CodigoSAP").value,
+        "Codigo SAP": document.getElementById("Codigo SAP").value,
         "Reserva": document.getElementById("Reserva").value,
         "Disciplina": document.getElementById("Disciplina").value,
         "Descripcion": document.getElementById("Descripcion").value,
@@ -141,7 +161,7 @@
         "Diametro": document.getElementById("Diametro").value,
         "Sch": document.getElementById("Sch").value,
         "Longitud": document.getElementById("Longitud").value,
-        "Peso (Kg)": document.getElementById("Peso").value,
+        "Peso (Kg)": document.getElementById("Peso (Kg)").value,
         "Fabricante": document.getElementById("Fabricante").value,
         "Serial": document.getElementById("Serial").value,
         "Modelo": document.getElementById("Modelo").value,
@@ -152,30 +172,26 @@
         "Observaciones": document.getElementById("Observaciones").value
       };
 
-      // Agrega campos para las imágenes
       for (let i = 0; i < 6; i++) {
-        data[`Imagen ${i + 1}`] = imagenesBase64[i] || "";
+        data[`Imagen ${i+1}`] = imagenesBase64[i] || "";
       }
 
       try {
-        const response = await fetch('https://sheetdb.io/api/v1/8ma5fhqubdk9o', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+        const response = await fetch("https://sheetdb.io/api/v1/8ma5fhqubdk9o", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ data: [data] })
         });
 
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error);
+        if (response.ok) {
+          alert("✅ Producto guardado en Google Sheets");
+          document.getElementById("formulario").reset();
+        } else {
+          const errorText = await response.text();
+          alert("❌ Error al guardar en Google Sheets:\n" + errorText);
         }
-
-        alert('✅ Datos guardados en Google Sheets');
-        document.getElementById('formulario').reset();
       } catch (error) {
-        console.error(error);
-        alert('❌ Error al guardar en Google Sheets:\n' + error.message);
+        alert("❌ Error de red o conexión:\n" + error);
       }
     });
 
@@ -184,7 +200,7 @@
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+        reader.onerror = (error) => reject(error);
       });
     }
   </script>
