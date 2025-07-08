@@ -3,30 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <title>InventarioSYT</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #f8f8f8;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"], input[type="number"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    label {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <h1>Formulario de Inventario</h1>
   <form id="formulario">
-    <input type="text" id="nombre" placeholder="Nombre" required><br>
-    <input type="text" id="codigoSAP" placeholder="Código SAP" required><br>
-    <input type="text" id="reserva" placeholder="Reserva"><br>
-    <input type="text" id="disciplina" placeholder="Disciplina"><br>
-    <input type="text" id="descripcion" placeholder="Descripción"><br>
-    <input type="number" id="cantidad" placeholder="Cantidad"><br>
-    <input type="text" id="diametro" placeholder="Diámetro"><br>
-    <input type="text" id="sch" placeholder="Sch"><br>
-    <input type="text" id="longitud" placeholder="Longitud"><br>
-    <input type="text" id="peso" placeholder="Peso (Kg)"><br>
-    <input type="text" id="fabricante" placeholder="Fabricante"><br>
-    <input type="text" id="serial" placeholder="Serial"><br>
-    <input type="text" id="modelo" placeholder="Modelo"><br>
-    <input type="text" id="escala" placeholder="Escala"><br>
-    <input type="text" id="certificado" placeholder="Certificado"><br>
-    <input type="text" id="proveedor" placeholder="Proveedor"><br>
-    <input type="text" id="inspeccion" placeholder="Inspección"><br>
-    <input type="text" id="observaciones" placeholder="Observaciones"><br>
-    <label>Imágenes (máx 6):</label><br>
-    <input type="file" id="imagenes" multiple accept="image/*"><br><br>
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="codigoSAP" placeholder="Código SAP" required>
+    <input type="text" id="reserva" placeholder="Reserva">
+    <input type="text" id="disciplina" placeholder="Disciplina">
+    <input type="text" id="descripcion" placeholder="Descripción">
+    <input type="number" id="cantidad" placeholder="Cantidad">
+    <input type="text" id="diametro" placeholder="Diámetro">
+    <input type="text" id="sch" placeholder="Sch">
+    <input type="text" id="longitud" placeholder="Longitud">
+    <input type="text" id="peso" placeholder="Peso (Kg)">
+    <input type="text" id="fabricante" placeholder="Fabricante">
+    <input type="text" id="serial" placeholder="Serial">
+    <input type="text" id="modelo" placeholder="Modelo">
+    <input type="text" id="escala" placeholder="Escala">
+    <input type="text" id="certificado" placeholder="Certificado">
+    <input type="text" id="proveedor" placeholder="Proveedor">
+    <input type="text" id="inspeccion" placeholder="Inspección">
+    <input type="text" id="observaciones" placeholder="Observaciones">
+    <label>Imágenes (máx 6):</label>
+    <input type="file" id="imagenes" multiple accept="image/*">
     <button type="submit">Guardar</button>
   </form>
 
@@ -34,7 +77,6 @@
     document.getElementById("formulario").addEventListener("submit", async function(e){
       e.preventDefault();
 
-      // Leer campos de texto
       const data = {
         marcaTemporal: new Date().toISOString(),
         nombre: document.getElementById("nombre").value,
@@ -57,21 +99,17 @@
         observaciones: document.getElementById("observaciones").value
       };
 
-      // Leer imágenes y convertirlas en Base64
       const imagenFiles = document.getElementById("imagenes").files;
       const imagenesBase64 = [];
-
       for (let i = 0; i < imagenFiles.length && i < 6; i++) {
         const base64 = await fileToBase64(imagenFiles[i]);
         imagenesBase64.push(base64);
       }
 
-      // Agregar las imágenes al data
       for (let i = 0; i < 6; i++) {
         data[`imagen${i+1}`] = imagenesBase64[i] || "";
       }
 
-      // Enviar a SheetDB
       try {
         const response = await fetch("https://sheetdb.io/api/v1/8ma5fhqubdk9o", {
           method: "POST",
