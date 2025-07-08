@@ -2,150 +2,101 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventario SYT</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
-    h1 { color: #2c3e50; }
-    form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 10px; }
-    input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
-    button { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 15px; cursor: pointer; }
-    .success { color: green; }
-    .error { color: red; }
-    #preview img { max-width: 100px; margin: 5px; border: 1px solid #ccc; }
-  </style>
+  <title>InventarioSYT</title>
 </head>
 <body>
-  <h1>Formulario de Inventario SYT</h1>
-  <form id="inventarioForm">
-    <label>Nombre
-      <input type="text" name="nombre" required />
-    </label>
-    <label>Código SAP
-      <input type="text" name="codigoSAP" required />
-    </label>
-    <label>Reserva
-      <input type="text" name="reserva" />
-    </label>
-    <label>Disciplina
-      <input type="text" name="disciplina" />
-    </label>
-    <label>Descripción
-      <textarea name="descripcion"></textarea>
-    </label>
-    <label>Cantidad
-      <input type="number" name="cantidad" />
-    </label>
-    <label>Diámetro
-      <input type="text" name="diametro" />
-    </label>
-    <label>SCH
-      <input type="text" name="sch" />
-    </label>
-    <label>Longitud
-      <input type="text" name="longitud" />
-    </label>
-    <label>Peso (Kg)
-      <input type="text" name="peso" />
-    </label>
-    <label>Fabricante
-      <input type="text" name="fabricante" />
-    </label>
-    <label>Serial / Colada
-      <input type="text" name="serial" />
-    </label>
-    <label>Modelo
-      <input type="text" name="modelo" />
-    </label>
-    <label>Escala de Medición
-      <input type="text" name="escala" />
-    </label>
-    <label>Certificado material suministrado
-      <input type="text" name="certificado" />
-    </label>
-    <label>Proveedor
-      <input type="text" name="proveedor" />
-    </label>
-    <label>Inspección visual
-      <input type="text" name="inspeccion" />
-    </label>
-    <label>Observaciones
-      <textarea name="observaciones"></textarea>
-    </label>
-    <label>Fotos del producto (máx. 6)
-      <input type="file" id="imagenes" accept="image/*" multiple capture />
-    </label>
-    <div id="preview"></div>
-    <button type="submit">Guardar Producto</button>
-    <p id="mensaje"></p>
+  <h1>Formulario de Inventario</h1>
+  <form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre" required><br>
+    <input type="text" id="codigoSAP" placeholder="Código SAP" required><br>
+    <input type="text" id="reserva" placeholder="Reserva"><br>
+    <input type="text" id="disciplina" placeholder="Disciplina"><br>
+    <input type="text" id="descripcion" placeholder="Descripción"><br>
+    <input type="number" id="cantidad" placeholder="Cantidad"><br>
+    <input type="text" id="diametro" placeholder="Diámetro"><br>
+    <input type="text" id="sch" placeholder="Sch"><br>
+    <input type="text" id="longitud" placeholder="Longitud"><br>
+    <input type="text" id="peso" placeholder="Peso (Kg)"><br>
+    <input type="text" id="fabricante" placeholder="Fabricante"><br>
+    <input type="text" id="serial" placeholder="Serial"><br>
+    <input type="text" id="modelo" placeholder="Modelo"><br>
+    <input type="text" id="escala" placeholder="Escala"><br>
+    <input type="text" id="certificado" placeholder="Certificado"><br>
+    <input type="text" id="proveedor" placeholder="Proveedor"><br>
+    <input type="text" id="inspeccion" placeholder="Inspección"><br>
+    <input type="text" id="observaciones" placeholder="Observaciones"><br>
+    <label>Imágenes (máx 6):</label><br>
+    <input type="file" id="imagenes" multiple accept="image/*"><br><br>
+    <button type="submit">Guardar</button>
   </form>
 
   <script>
-    const apiUrl = "https://sheetdb.io/api/v1/8ma5fhqubdk9o";
-    const form = document.getElementById("inventarioForm");
-    const mensaje = document.getElementById("mensaje");
-    const imagenesInput = document.getElementById("imagenes");
-    const previewDiv = document.getElementById("preview");
-    let imagenesBase64 = [];
-
-    imagenesInput.addEventListener('change', async () => {
-      previewDiv.innerHTML = '';
-      imagenesBase64 = [];
-      const archivos = Array.from(imagenesInput.files).slice(0, 6);
-
-      for (const archivo of archivos) {
-        const base64 = await convertirABase64(archivo);
-        imagenesBase64.push(base64);
-        const img = document.createElement('img');
-        img.src = base64;
-        previewDiv.appendChild(img);
-      }
-    });
-
-    function convertirABase64(archivo) {
-      return new Promise((resolve, reject) => {
-        const lector = new FileReader();
-        lector.onload = () => resolve(lector.result);
-        lector.onerror = error => reject(error);
-        lector.readAsDataURL(archivo);
-      });
-    }
-
-    form.addEventListener("submit", async (e) => {
+    document.getElementById("formulario").addEventListener("submit", async function(e){
       e.preventDefault();
-      mensaje.textContent = '';
 
-      const datos = Object.fromEntries(new FormData(form).entries());
-      datos["Marca temporal"] = new Date().toISOString();
+      // Leer campos de texto
+      const data = {
+        marcaTemporal: new Date().toISOString(),
+        nombre: document.getElementById("nombre").value,
+        codigoSAP: document.getElementById("codigoSAP").value,
+        reserva: document.getElementById("reserva").value,
+        disciplina: document.getElementById("disciplina").value,
+        descripcion: document.getElementById("descripcion").value,
+        cantidad: document.getElementById("cantidad").value,
+        diametro: document.getElementById("diametro").value,
+        sch: document.getElementById("sch").value,
+        longitud: document.getElementById("longitud").value,
+        peso: document.getElementById("peso").value,
+        fabricante: document.getElementById("fabricante").value,
+        serial: document.getElementById("serial").value,
+        modelo: document.getElementById("modelo").value,
+        escala: document.getElementById("escala").value,
+        certificado: document.getElementById("certificado").value,
+        proveedor: document.getElementById("proveedor").value,
+        inspeccion: document.getElementById("inspeccion").value,
+        observaciones: document.getElementById("observaciones").value
+      };
 
-      // Guardar las imágenes en campos separados
-      for (let i = 0; i < 6; i++) {
-        datos[`Imagen${i+1}`] = imagenesBase64[i] || "";
+      // Leer imágenes y convertirlas en Base64
+      const imagenFiles = document.getElementById("imagenes").files;
+      const imagenesBase64 = [];
+
+      for (let i = 0; i < imagenFiles.length && i < 6; i++) {
+        const base64 = await fileToBase64(imagenFiles[i]);
+        imagenesBase64.push(base64);
       }
 
+      // Agregar las imágenes al data
+      for (let i = 0; i < 6; i++) {
+        data[`imagen${i+1}`] = imagenesBase64[i] || "";
+      }
+
+      // Enviar a SheetDB
       try {
-        const res = await fetch(apiUrl, {
+        const response = await fetch("https://sheetdb.io/api/v1/8ma5fhqubdk9o", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ data: datos })
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
         });
 
-        if (res.ok) {
-          mensaje.textContent = "✅ Producto guardado correctamente en Google Sheets.";
-          mensaje.className = "success";
-          form.reset();
-          previewDiv.innerHTML = '';
-          imagenesBase64 = [];
+        if (response.ok) {
+          alert("✅ Producto guardado en Google Sheets");
         } else {
-          mensaje.textContent = `❌ Error al guardar. Código: ${res.status}`;
-          mensaje.className = "error";
+          alert("❌ Error al guardar en Google Sheets: " + response.statusText);
         }
       } catch (error) {
-        mensaje.textContent = `❌ Error de red o conexión: ${error.message}`;
-        mensaje.className = "error";
+        alert("❌ Error de red o conexión: " + error);
       }
     });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
+    }
   </script>
 </body>
 </html>
