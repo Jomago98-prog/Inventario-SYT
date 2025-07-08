@@ -2,76 +2,142 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>InventarioSYT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulario de Inventario</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-      background-color: #f8f8f8;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
     }
-    h1 {
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 1rem;
       text-align: center;
-      color: #333;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    main {
+      max-width: 800px;
+      background-color: #fff;
+      margin: 2rem auto;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+      color: #007bff;
     }
     form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input[type="text"], input[type="number"], input[type="file"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
     }
     label {
       font-weight: bold;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="file"] {
+      padding: 0.3rem;
+    }
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    button {
+      grid-column: 1 / -1;
+      padding: 0.8rem;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Formulario de Inventario</h1>
-  <form id="formulario">
-    <input type="text" id="nombre" placeholder="Nombre" required>
-    <input type="text" id="codigoSAP" placeholder="Código SAP" required>
-    <input type="text" id="reserva" placeholder="Reserva">
-    <input type="text" id="disciplina" placeholder="Disciplina">
-    <input type="text" id="descripcion" placeholder="Descripción">
-    <input type="number" id="cantidad" placeholder="Cantidad">
-    <input type="text" id="diametro" placeholder="Diámetro">
-    <input type="text" id="sch" placeholder="Sch">
-    <input type="text" id="longitud" placeholder="Longitud">
-    <input type="text" id="peso" placeholder="Peso (Kg)">
-    <input type="text" id="fabricante" placeholder="Fabricante">
-    <input type="text" id="serial" placeholder="Serial">
-    <input type="text" id="modelo" placeholder="Modelo">
-    <input type="text" id="escala" placeholder="Escala">
-    <input type="text" id="certificado" placeholder="Certificado">
-    <input type="text" id="proveedor" placeholder="Proveedor">
-    <input type="text" id="inspeccion" placeholder="Inspección">
-    <input type="text" id="observaciones" placeholder="Observaciones">
-    <label>Imágenes (máx 6):</label>
-    <input type="file" id="imagenes" multiple accept="image/*">
-    <button type="submit">Guardar</button>
-  </form>
+  <header>📦 Inventario SYT</header>
+  <main>
+    <h2>Formulario de Inventario</h2>
+    <form id="formulario">
+      <label>Nombre</label>
+      <input type="text" id="nombre" required>
+
+      <label>Código SAP</label>
+      <input type="text" id="codigoSAP">
+
+      <label>Reserva</label>
+      <input type="text" id="reserva">
+
+      <label>Disciplina</label>
+      <input type="text" id="disciplina">
+
+      <label>Descripción</label>
+      <input type="text" id="descripcion">
+
+      <label>Cantidad</label>
+      <input type="number" id="cantidad">
+
+      <label>Diámetro</label>
+      <input type="text" id="diametro">
+
+      <label>Sch</label>
+      <input type="text" id="sch">
+
+      <label>Longitud</label>
+      <input type="text" id="longitud">
+
+      <label>Peso (Kg)</label>
+      <input type="text" id="peso">
+
+      <label>Fabricante</label>
+      <input type="text" id="fabricante">
+
+      <label>Serial</label>
+      <input type="text" id="serial">
+
+      <label>Modelo</label>
+      <input type="text" id="modelo">
+
+      <label>Escala</label>
+      <input type="text" id="escala">
+
+      <label>Certificado</label>
+      <input type="text" id="certificado">
+
+      <label>Proveedor</label>
+      <input type="text" id="proveedor">
+
+      <label>Inspección</label>
+      <input type="text" id="inspeccion">
+
+      <label>Observaciones</label>
+      <textarea id="observaciones" rows="3"></textarea>
+
+      <label class="full-width">Imágenes (máx. 6)</label>
+      <input class="full-width" type="file" id="imagenes" accept="image/*" multiple>
+
+      <button type="submit">Guardar en Google Sheets</button>
+    </form>
+  </main>
 
   <script>
     document.getElementById("formulario").addEventListener("submit", async function(e){
@@ -99,6 +165,7 @@
         observaciones: document.getElementById("observaciones").value
       };
 
+      // Manejo de imágenes
       const imagenFiles = document.getElementById("imagenes").files;
       const imagenesBase64 = [];
       for (let i = 0; i < imagenFiles.length && i < 6; i++) {
@@ -106,6 +173,7 @@
         imagenesBase64.push(base64);
       }
 
+      // Asegurarse de 6 campos aunque falten imágenes
       for (let i = 0; i < 6; i++) {
         data[`imagen${i+1}`] = imagenesBase64[i] || "";
       }
@@ -113,17 +181,19 @@
       try {
         const response = await fetch("https://sheetdb.io/api/v1/8ma5fhqubdk9o", {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(data)
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: [data] })
         });
 
         if (response.ok) {
           alert("✅ Producto guardado en Google Sheets");
+          document.getElementById("formulario").reset();
         } else {
-          alert("❌ Error al guardar en Google Sheets: " + response.statusText);
+          const errorText = await response.text();
+          alert("❌ Error al guardar en Google Sheets:\n" + errorText);
         }
       } catch (error) {
-        alert("❌ Error de red o conexión: " + error);
+        alert("❌ Error de red o conexión:\n" + error);
       }
     });
 
